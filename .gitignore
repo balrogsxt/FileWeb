@@ -2,3 +2,4 @@
 .vscode
 /bin
 config.yaml
+.DS_Store

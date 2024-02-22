@@ -6,13 +6,14 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/liushuochen/gotable"
 	"github.com/liushuochen/gotable/table"
+	"strings"
+
 	"github.com/spf13/viper"
 	"io"
 	"io/fs"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 )
 
 var config *Config
@@ -44,10 +45,6 @@ func main() {
 	loadConfig("config.yaml", func(ctx context.Context) {
 		printUser()
 	})
-	// 设置端口和服务器
-	if config.Port == 0 {
-		config.Port = 8181
-	}
 	addr := fmt.Sprintf(":%d", config.Port)
 	server.Addr = addr
 
@@ -63,7 +60,7 @@ func main() {
 		mux.Handle(path, BasicAuth(http.StripPrefix(mp.Path, filesServer), mp.Auth))
 	}
 	printMapping()
-	fmt.Printf("FileWeb 服务启动在 http://0.0.0.0%s\n", addr)
+	fmt.Printf("FileWeb 服务启动在 http://127.0.0.1%s\n", addr)
 	server.Handler = mux
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalln(fmt.Sprintf("FileWeb 启动失败: %s", err.Error()))
@@ -120,6 +117,7 @@ func printUser() {
 	t.AddRows(values)
 	fmt.Println(t)
 }
+
 func printMapping() {
 	t, err := gotable.Create("虚拟目录", "本地路径", "认证状态")
 	if err != nil {

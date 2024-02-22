@@ -2,7 +2,7 @@ package main
 
 var (
 	DefaultConfigTpl = `
-port: 8081 #服务启动端口
+port: 10261 #服务启动端口
 #用户列表
 user:
   - name: "root"

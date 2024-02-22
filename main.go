@@ -6,6 +6,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/liushuochen/gotable"
 	"github.com/liushuochen/gotable/table"
+	"net"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -64,7 +65,7 @@ func main() {
 	}
 	printMapping()
 	fmt.Printf("FileWeb Version: %s\n", FileWebVersion)
-	fmt.Printf("FileWeb 服务启动在 http://127.0.0.1%s\n", addr)
+	printHost(addr)
 	server.Handler = mux
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalln(fmt.Sprintf("FileWeb 启动失败: %s", err.Error()))
@@ -189,4 +190,29 @@ func (f ReadDirFile) Stat() (fs.FileInfo, error) {
 		return nil, os.ErrNotExist
 	}
 	return s, err
+}
+
+func printHost(addr string) {
+	interfaces, err := net.Interfaces()
+	fmt.Printf("FileWeb 服务启动在 http://127.0.0.1%s\n", addr)
+	if err != nil {
+		return
+	}
+	ipList := make([]string, 0)
+	for _, iface := range interfaces {
+		addrs, err := iface.Addrs()
+		if err == nil {
+			for _, addr := range addrs {
+				switch v := addr.(type) {
+				case *net.IPNet:
+					if !v.IP.IsLoopback() && !v.IP.IsLinkLocalUnicast() && v.IP.To4() != nil {
+						ipList = append(ipList, v.IP.String())
+					}
+				}
+			}
+		}
+	}
+	for _, ip := range ipList {
+		fmt.Printf("                   http://%s%s\n", ip, addr)
+	}
 }

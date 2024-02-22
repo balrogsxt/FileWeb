@@ -49,8 +49,11 @@ func main() {
 	server.Addr = addr
 
 	for _, mp := range config.Mapping {
-		fs := FileSystem{
-			fs: http.Dir(mp.Local),
+		var fs http.FileSystem = http.Dir(mp.Local)
+		if !config.FolderIndex {
+			fs = FileSystem{
+				fs: http.Dir(mp.Local),
+			}
 		}
 		filesServer := http.FileServer(fs)
 		path := mp.Path

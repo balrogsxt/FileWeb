@@ -10,7 +10,8 @@ type Mapping struct {
 	Auth  bool   //目录是否需要认证
 }
 type Config struct {
-	Port    uint16 //端口
-	User    []User
-	Mapping []Mapping
+	Port        uint16 //端口
+	FolderIndex bool   `mapstructure:"folderIndex"`
+	User        []User
+	Mapping     []Mapping
 }

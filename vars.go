@@ -4,6 +4,7 @@ var (
 	FileWebVersion   = "0.0.1"
 	DefaultConfigTpl = `
 port: 10261 #服务启动端口
+folderIndex: true #是否开启目录索引
 #用户列表
 user:
   - name: "root"

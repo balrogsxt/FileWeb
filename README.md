@@ -8,6 +8,8 @@
 ```yaml
 #服务启动端口
 port: 10261
+#是否开启目录索引
+folderIndex: true
 #用户列表(修改后直接生效,无需重启)
 user:
   - name: "root"

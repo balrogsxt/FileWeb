@@ -1,6 +1,7 @@
 package main
 
 var (
+	FileWebVersion   = "0.0.1"
 	DefaultConfigTpl = `
 port: 10261 #服务启动端口
 #用户列表

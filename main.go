@@ -60,6 +60,7 @@ func main() {
 		mux.Handle(path, BasicAuth(http.StripPrefix(mp.Path, filesServer), mp.Auth))
 	}
 	printMapping()
+	fmt.Printf("FileWeb Version: %s\n", FileWebVersion)
 	fmt.Printf("FileWeb 服务启动在 http://127.0.0.1%s\n", addr)
 	server.Handler = mux
 	if err := server.ListenAndServe(); err != nil {
